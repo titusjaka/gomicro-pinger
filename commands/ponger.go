@@ -3,12 +3,13 @@ package commands
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net"
 	"os"
 	"os/signal"
 
-	"github.com/titusjaka/gomicro-pinger/grpcponger"
-	"github.com/titusjaka/gomicro-pinger/microponger"
+	"github.com/titusjaka/gomicro-pinger/internal/grpcponger"
+	"github.com/titusjaka/gomicro-pinger/internal/microponger"
 	pb "github.com/titusjaka/gomicro-pinger/proto"
 
 	"golang.org/x/sync/errgroup"
@@ -35,6 +36,8 @@ func (c PongerMicroCmd) Run() error {
 	if err := pb.RegisterPingerHandler(mService.Server(), &microponger.Ponger{}); err != nil {
 		return fmt.Errorf("register handler: %w", err)
 	}
+
+	slog.Info("starting micro server")
 
 	return mService.Run()
 }
@@ -66,6 +69,7 @@ func (c PongerGRPCCmd) Run() error {
 	})
 
 	gr.Go(func() error {
+		slog.Info("starting grpc server")
 		return grpcServer.Serve(lister)
 	})
 
@@ -85,6 +89,8 @@ func (c PongerMicroGRPCCmd) Run() error {
 	if err := pb.RegisterPingerHandler(mService.Server(), &microponger.Ponger{}); err != nil {
 		return fmt.Errorf("register handler: %w", err)
 	}
+
+	slog.Info("starting micro-grpc server")
 
 	return mService.Run()
 }

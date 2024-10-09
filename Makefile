@@ -8,3 +8,7 @@ proto:
 		--go-grpc_opt=paths=source_relative \
 		--micro_out=. \
 		proto/service.proto
+
+.PHONY: build
+build:
+	@go build -o build/gomicro-pinger *.go

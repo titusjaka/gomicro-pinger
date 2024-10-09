@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pinger-micro-grpc
+  labels:
+    app: pinger-micro-grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pinger-micro-grpc
+  template:
+    metadata:
+      labels:
+        app: pinger-micro-grpc
+    spec:
+      containers:
+        - name: pinger-micro-grpc
+          image: gomicro-pinger-image
+          args: [ "pinger", "micro-grpc", "--port=6066" ]

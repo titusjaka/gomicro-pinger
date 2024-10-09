@@ -8,8 +8,8 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/titusjaka/gomicro-pinger/grpcpinger"
-	"github.com/titusjaka/gomicro-pinger/micropinger"
+	"github.com/titusjaka/gomicro-pinger/internal/grpcpinger"
+	"github.com/titusjaka/gomicro-pinger/internal/micropinger"
 	pb "github.com/titusjaka/gomicro-pinger/proto"
 
 	"google.golang.org/grpc"
