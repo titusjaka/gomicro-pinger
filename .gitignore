@@ -1,0 +1,7 @@
+.idea
+.vscode
+tags
+vendor
+.DS_Store
+.env
+/coverage.txt
