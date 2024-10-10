@@ -1,0 +1,39 @@
+# borrowed from https://github.com/go-micro/dashboard/blob/main/deployment.yaml
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: micro-dashboard
+  labels:
+    app: micro-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro-dashboard
+  template:
+    metadata:
+      labels:
+        app: micro-dashboard
+    spec:
+      containers:
+        - image: xpunch/go-micro-dashboard:latest
+          imagePullPolicy: IfNotPresent
+          name: dashboard
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+          env:
+            - name: MICRO_REGISTRY
+              value: "kubernetes"
+            - name: MICRO_CLIENT_RETRIES
+              value: "0"
+            # default config type env
+            # - SERVER_AUTH_USERNAME=user
+            # - SERVER_AUTH_PASSWORD=pass
+            - name: SERVER_AUTH_USERNAME
+              value: "user"
+            - name: SERVER_AUTH_PASSWORD
+              value: "pass"
+            # SERVER_ADDRESS=:8082
+            - name: SERVER_ADDRESS
+              value: ":8081"

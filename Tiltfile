@@ -4,6 +4,7 @@ local_resource(
     'gomicro-pinger-compile',
     'CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o build/gomicro-pinger ./',
     deps=['./main.go', './internal/', './commands/'],
+    labels=['build']
   )
 
 docker_build_with_restart(
@@ -15,26 +16,30 @@ docker_build_with_restart(
     './build',
   ],
   live_update=[
-    sync('./build', '/app/build'),
+    sync('./build', '/app'),
   ],
 )
 
 k8s_yaml('deploy/ponger.micro-grpc.k8s.tilt.yaml')
-
 k8s_resource(
     'ponger-micro-grpc',
-    labels=['backend']
+    labels=['server']
 )
 
 k8s_yaml('deploy/pinger.micro-grpc.k8s.tilt.yaml')
-
 k8s_resource(
     'pinger-micro-grpc',
-    labels=['backend']
+    labels=['client']
 )
 
-# k8s_resource(
-#     'example-go', 
-#     port_forwards=6066,
-#     resource_deps='example-go-compile'],
-#   )
+k8s_yaml('deploy/dashboard.k8s.tilt.yaml')
+k8s_resource(
+    'micro-dashboard',
+    labels=['dashboard']
+)
+
+k8s_resource(
+    'micro-dashboard', 
+    port_forwards='8081',
+    # resource_deps=['micro-dashboard'],
+  )

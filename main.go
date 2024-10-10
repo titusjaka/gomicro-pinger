@@ -1,6 +1,9 @@
 package main
 
 import (
+	"log/slog"
+	"os"
+
 	"github.com/titusjaka/gomicro-pinger/commands"
 
 	"github.com/alecthomas/kong"
@@ -12,6 +15,12 @@ type App struct {
 }
 
 func main() {
+	slog.SetDefault(
+		slog.Default().With(
+			slog.String("HOSTNAME", os.Getenv("HOSTNAME")),
+		),
+	)
+
 	var app App
 	kCtx := kong.Parse(
 		&app,
